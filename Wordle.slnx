@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Wordle.WPF/Wordle.WPF.csproj" />
+  <Project Path="Wordle/Wordle.csproj" />
+</Solution>
