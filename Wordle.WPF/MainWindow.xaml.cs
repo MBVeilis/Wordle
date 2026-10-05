@@ -8,6 +8,7 @@ namespace Wordle.WPF
     public partial class MainWindow : Window
     {
         private readonly WordleGame game = new();
+        private int currentColumn = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -36,27 +37,115 @@ namespace Wordle.WPF
                 GameBoard.Children.Add(tile);
             }
         }
-        
-        private void GuessButton_Click(object sender, RoutedEventArgs e)
+
+        private void KeyboardButton_Click(object sender, RoutedEventArgs e)
         {
-            string guess = GuessInput.Text.Trim();
+            Button button = (Button)sender; 
+            
+            string key = button.Tag?.ToString() ?? ""; 
+            
+            if (key == "enter") 
+            { 
+                SubmitGuess(); 
+                return; 
+            }
+
+            if (key == "backspace") 
+            { 
+                RemoveLetter(); 
+                return; 
+            }
+
+            AddLetter(key);
+        }
+
+        private void AddLetter(string letter)
+        {
+            if (currentColumn >= 5)
+            {
+                return;
+            }
+
+            int row = game.Attempts;
+
+            Border tile = (Border)GameBoard.Children[
+                row * 5 + currentColumn
+            ];
+            
+            TextBlock text = (TextBlock)tile.Child;
+
+            text.Text = letter.ToUpper();
+
+            currentColumn++;
+        }
+
+        private void RemoveLetter()
+        {
+            if (currentColumn <= 0)
+            {
+                return;
+            }
+
+            currentColumn--;
+
+            int row = game.Attempts;
+
+            Border tile = (Border)GameBoard.Children[
+                row * 5 + currentColumn
+            ];
+
+            TextBlock text = (TextBlock)tile.Child;
+
+            text.Text = "";
+        }
+
+        private string GetCurrentGuess()
+        {
+            int row = game.Attempts;
+
+            string guess = "";
+
+            for (int column = 0; column < 5; column++)
+            {
+                Border tile = (Border)GameBoard.Children[
+                    row * 5 + column
+                ];
+
+                TextBlock text = (TextBlock)tile.Child;
+
+                guess += text.Text.ToLower();
+            }
+
+            return guess;
+        }
+
+        private void SubmitGuess()
+        {
+            if (currentColumn < 5)
+            {
+                MessageText.Text = "Ordet skal være 5 bogstaver.";
+                return;
+            }
+
+            string guess = GetCurrentGuess();
 
             try
             {
-                LetterResult[] results = game.MakeGuess(guess);
+                LetterResult[] results = game.MakeGuess(guess); 
+                
+                DisplayGuess(game.Attempts - 1, guess, results); 
+                
+                UpdateKeyboard(guess, results); 
+                
+                currentColumn = 0;
 
-                DisplayGuess(game.Attempts - 1, guess, results);
-
-                GuessInput.Clear();
-                GuessInput.Focus();
-
-                if (game.HasWon)
-                {
-                    MessageText.Text = "Tillykke! Du gættede ordet!";
-                }
-                else if (game.IsGameOver)
-                {
-                    MessageText.Text = "Spillet er slut!";
+                if (game.HasWon) 
+                { 
+                    MessageText.Text = "Tillykke! Du gættede ordet!"; 
+                } 
+                else if (game.IsGameOver) 
+                { 
+                    MessageText.Text = "Spillet er slut!"; 
                 }
             }
             catch (ArgumentException ex)
@@ -104,14 +193,111 @@ namespace Wordle.WPF
             }
         }
 
+        private void UpdateKeyboard(string guess, LetterResult[] results)
+        {
+            for (int i = 0; i < guess.Length; i++)
+            {
+                char letter = guess[i];
+
+                Button? button = FindKeyboardButton(letter);
+
+                if (button == null)
+                {
+                    continue;
+                }
+
+                switch (results[i])
+                {
+                    case LetterResult.Correct:
+                        
+                        button.Background = new SolidColorBrush(
+                            Color.FromRgb(83, 141, 78)
+                        );
+
+                        break;
+
+                    case LetterResult.WrongPosition:
+                        
+                        if (button.Background is SolidColorBrush brush && brush.Color == Color.FromRgb(83, 141, 78))
+                        {
+                            continue;
+                        }
+                        
+                        button.Background = new SolidColorBrush(
+                            Color.FromRgb(181, 159, 59)
+                        );
+                        
+                        break;
+
+                    case LetterResult.NotInWord:
+
+                        if (button.Background is SolidColorBrush existingBrush &&
+                            (existingBrush.Color == Color.FromRgb(83, 141, 78) ||
+                            existingBrush.Color == Color.FromRgb(181, 159, 59)))
+                        {
+                            continue;
+                        }
+
+                        button.Background = new SolidColorBrush(
+                            Color.FromRgb(58, 58, 60)
+                        );
+
+                        break;
+                }
+            }
+        }
+
+        private Button? FindKeyboardButton(char letter)
+        {
+            foreach (object child in GetVisualChildren(Keyboard))
+            {
+                if (child is Button button && button.Tag?.ToString() == letter.ToString())
+                {
+                    return button;
+                }
+            }
+            
+            return null;
+        }
+
+        private IEnumerable<DependencyObject> GetVisualChildren(DependencyObject parent)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+
+                yield return child;
+
+                foreach (DependencyObject descendant in GetVisualChildren(child))
+                {
+                    yield return descendant;
+                }
+            }
+        }
+
+        private void ResetKeyboard()
+        {
+            foreach (object child in GetVisualChildren(Keyboard))
+            {
+                if (child is Button button &&
+                    button.Tag?.ToString()?.Length == 1)
+                {
+                    button.Background = new SolidColorBrush(
+                        Color.FromRgb(129, 131, 132)
+                    );
+                }
+            }   
+        }
+
         private void NewGameButton_Click(object sender, RoutedEventArgs e)
         {
             game.NewGame();
 
             CreateBoard();
 
-            GuessInput.Clear();
-            GuessInput.Focus();
+            ResetKeyboard();
+
+            currentColumn = 0;
 
             MessageText.Text = "";
         }
