@@ -4,8 +4,164 @@
         Title="Wordle" 
         Height="750" 
         Width="500"
+        MinHeight="700"
+        MinWidth="450"
         WindowStartupLocation="CenterScreen"
         Background="#121213">
+
+    <Window.Resources>
+
+        <!-- Farver til tiles -->
+        <SolidColorBrush x:Key="TileBorderBrush"
+                         Color="#3A3A3C"/>
+
+        <SolidColorBrush x:Key="TileBackgroundBrush"
+                         Color="#121213"/>
+
+        <SolidColorBrush x:Key="CorrectBrush"
+                         Color="#538D4E"/>
+
+        <SolidColorBrush x:Key="WrongPositionBrush"
+                         Color="#B59F3B"/>
+
+        <SolidColorBrush x:Key="NotInWordBrush"
+                         Color="#3A3A3C"/>
+
+        <!-- Standard tekst -->
+        <Style x:Key="TileTextStyle"
+               TargetType="TextBlock">
+
+            <Setter Property="Foreground"
+                    Value="white"/>
+
+            <Setter Property="FontSize"
+                    Value="28"/>
+
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+        </Style>
+
+        <!-- Tile -->
+        <Style x:Key="TileStyle"
+               TargetType="Border">
+
+            <Setter Property="Width"
+                    Value="52"/>
+
+            <Setter Property="Height"
+                    Value="52"/>
+
+            <Setter Property="BorderThickness"
+                    Value="2"/>
+
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource TileBorderBrush}"/>
+
+            <Setter Property="Background"
+                    Value="{StaticResource TileBackgroundBrush}"/>
+
+            <Setter Property="Margin"
+                    Value="3"/>
+        </Style>
+
+        <!-- Input -->
+        <Style x:Key="GuessInputStyle"
+               TargetType="TextBox">
+
+            <Setter Property="Width"
+                    Value="250"/>
+
+            <Setter Property="Height"
+                    Value="48"/>
+
+            <Setter Property="FontSize"
+                    Value="24"/>
+
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+
+            <Setter Property="Foreground"
+                    Value="White"/>
+
+            <Setter Property="Background"
+                    Value="#121213"/>
+
+            <Setter Property="BorderBrush"
+                    Value="#565758"/>
+
+            <Setter Property="BorderThickness"
+                    Value="2"/>
+
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center"/>
+
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center"/>
+        </Style>
+
+        <!-- Gæt-knap -->
+        <Style x:Key="GuessButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Width" 
+                    Value="80"/>
+            
+            <Setter Property="Height" 
+                    Value="48"/>
+
+            <Setter Property="Margin" 
+                    Value="10,0,0,0"/>
+
+            <Setter Property="FontSize" 
+                    Value="16"/>
+
+            <Setter Property="FontWeight" 
+                    Value="Bold"/>
+
+            <Setter Property="Foreground" 
+                    Value="White"/>
+
+            <Setter Property="Background" 
+                    Value="#538D4E"/>
+
+            <Setter Property="BorderThickness" 
+                    Value="0"/>
+        </Style>
+
+        <!-- Nyt spil -->
+        <Style x:Key="NewGameButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Width" 
+                    Value="120"/>
+            
+            <Setter Property="Height" 
+                    Value="40"/>
+
+            <Setter Property="FontSize" 
+                    Value="14"/>
+
+            <Setter Property="FontWeight" 
+                    Value="Bold"/>
+
+            <Setter Property="Foreground" 
+                    Value="White"/>
+
+            <Setter Property="Background" 
+                    Value="#3A3A3C"/>
+
+            <Setter Property="BorderThickness" 
+                    Value="0"/>
+
+        </Style>
+
+    </Window.Resources>
 
     <Grid Margin="30">
 
@@ -41,13 +197,12 @@
         <!-- Besked -->
         <TextBlock x:Name="MessageText"
                    Grid.Row="2"
-                   Text=""
                    Foreground="White"
                    FontSize="16"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
                    TextAlignment="Center"
-                   Margin="0,20,0,10"
+                   Margin="0,15,0,10"
         />
 
         <!-- Input -->
@@ -57,36 +212,23 @@
                     Margin="0,10">
 
             <TextBox x:Name="GuessInput"
-                     Width="100"
-                     Height="40"
+                     Style="{StaticResource GuessInputStyle}"
                      MaxLength="5"
-                     FontSize="22"
                      CharacterCasing="Lower"
-                     HorizontalContentAlignment="Center"
-                     VerticalContentAlignment="Center"
             />
 
-            <Button Content="Get"
-                    Width="80"
-                    Height="40"
-                    Margin="10,0,0,0"
+            <Button Content="GET"
+                    Style="{StaticResource GuessButtonStyle}"
                     Click="GuessButton_Click"
             />
         </StackPanel>
 
-        <!-- Knapper -->
-        <StackPanel Grid.Row="4"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    Margin="0,15">
-
-            <Button Content="Nyt spil"
-                    Width="100"
-                    Height="35"
-                    Click="NewGameButton_Click"
-            />
-
-        </StackPanel>
-
+        <!-- Nyt spil -->
+        <Button Grid.Row="4"
+                Content="NYT SPIL"
+                Style="{StaticResource NewGameButtonStyle}"
+                HorizontalAlignment="Center"
+                Margin="0,15,0,0"
+                Click="NewGameButton_Click"/>
     </Grid>
 </Window>

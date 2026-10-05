@@ -23,19 +23,12 @@ namespace Wordle.WPF
             {
                 Border tile = new()
                 {
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(58, 58, 60)),
-                    BorderThickness = new Thickness(2),
-                    Background = new SolidColorBrush(Color.FromRgb(18, 18, 19)),
-                    Margin = new Thickness(3)
+                    Style = (Style)FindResource("TileStyle")
                 };
 
                 TextBlock letter = new()
                 {
-                    Foreground = Brushes.White,
-                    FontSize = 24,
-                    FontWeight = FontWeights.Bold,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
+                    Style = (Style)FindResource("TileTextStyle")
                 };
 
                 tile.Child = letter;
