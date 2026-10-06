@@ -116,35 +116,6 @@
                     Value="12"/>
         </Style>
 
-        <!-- GÆT -->
-        <Style x:Key="GuessButtonStyle"
-               TargetType="Button">
-
-            <Setter Property="Width" 
-                    Value="80"/>
-            
-            <Setter Property="Height" 
-                    Value="48"/>
-
-            <Setter Property="Margin" 
-                    Value="10,0,0,0"/>
-
-            <Setter Property="FontSize" 
-                    Value="16"/>
-
-            <Setter Property="FontWeight" 
-                    Value="Bold"/>
-
-            <Setter Property="Foreground" 
-                    Value="White"/>
-
-            <Setter Property="Background" 
-                    Value="#538D4E"/>
-
-            <Setter Property="BorderThickness" 
-                    Value="0"/>
-        </Style>
-
         <!-- NYT SPIL -->
         <Style x:Key="NewGameButtonStyle"
                TargetType="Button">

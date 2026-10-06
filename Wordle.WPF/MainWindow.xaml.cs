@@ -14,6 +14,11 @@ namespace Wordle.WPF
             InitializeComponent();
 
             CreateBoard();
+
+            PreviewKeyDown += MainWindow_PreviewKeyDown;
+
+            Focusable = true;
+            Focus();
         }
 
         private void CreateBoard()
@@ -38,6 +43,37 @@ namespace Wordle.WPF
             }
         }
 
+        private void MainWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key >= System.Windows.Input.Key.A &&
+                e.Key <= System.Windows.Input.Key.Z)
+            {
+                string letter = e.Key.ToString().ToLower();
+
+                AddLetter(letter);
+
+                e.Handled = true;
+
+                return;
+            }
+
+            if (e.Key == System.Windows.Input.Key.Back)
+            {
+                RemoveLetter();
+
+                e.Handled = true;
+
+                return;
+            }
+
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                SubmitGuess();
+
+                e.Handled = true;
+            }
+        }
+
         private void KeyboardButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender; 
@@ -57,6 +93,8 @@ namespace Wordle.WPF
             }
 
             AddLetter(key);
+
+            Focus();
         }
 
         private void AddLetter(string letter)
@@ -124,6 +162,9 @@ namespace Wordle.WPF
             if (currentColumn < 5)
             {
                 MessageText.Text = "Ordet skal være 5 bogstaver.";
+
+                Focus();
+                
                 return;
             }
 
@@ -156,6 +197,8 @@ namespace Wordle.WPF
             {
                 MessageText.Text = ex.Message;
             }
+
+            Focus();
         }
 
         private void DisplayGuess(int row, string guess, LetterResult[] results)
