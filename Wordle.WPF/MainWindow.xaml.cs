@@ -389,14 +389,11 @@ namespace Wordle.WPF
             {
                 From = 1,
                 To = 0,
-                Duration = TimeSpan.FromMilliseconds(150)
-            };
-
-            DoubleAnimation beginAnimation = new()
-            {
-                From = 0,
-                To = 1,
-                Duration = TimeSpan.FromMilliseconds(150)
+                Duration = TimeSpan.FromMilliseconds(150),
+                EasingFunction = new CubicEase
+                {
+                    EasingMode = EasingMode.EaseIn
+                }
             };
 
             TaskCompletionSource<bool> firstHalf = new();
@@ -436,7 +433,11 @@ namespace Wordle.WPF
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromMilliseconds(150)
+                Duration = TimeSpan.FromMilliseconds(150),
+                EasingFunction = new CubicEase
+                {
+                    EasingMode = EasingMode.EaseOut
+                }
             };
 
             TaskCompletionSource<bool> secondHalf = new();
