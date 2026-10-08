@@ -11,7 +11,7 @@
 
     <Window.Resources>
 
-        <!-- FARVER -->
+        <!-- COLORS -->
         <SolidColorBrush x:Key="TileBorderBrush"
                          Color="#3A3A3C"/>
 
@@ -112,11 +112,11 @@
             <Setter Property="Cursor"
                     Value="Hand"/>
 
-            <!-- Fjern den blå fokusmarkering -->
+            <!-- Remove the blue focus highlight -->
             <Setter Property="FocusVisualStyle"
                     Value="{x:Null}"/>
 
-            <!-- Gør knappen til en ren visuel Wordle-tast -->
+            <!-- Make the button a purely visual Wordle key -->
             <Setter Property="Focusable"
                     Value="False"/>
 
@@ -198,7 +198,7 @@
                     Value="12"/>
         </Style>
 
-        <!-- NYT SPIL -->
+        <!-- NEW GAME -->
         <Style x:Key="NewGameButtonStyle"
                TargetType="Button">
 
@@ -237,7 +237,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- TITEL -->
+        <!-- TITLE -->
         <TextBlock Grid.Row="0"
                    Text="WORDLE"
                    Foreground="White"
@@ -247,7 +247,7 @@
                    Margin="0,0,0,20"
         />
 
-        <!-- SPILLEBRÆT -->
+        <!-- GAMEBOARD -->
         <UniformGrid x:Name="GameBoard"
                      Grid.Row="1"
                      Rows="6"
@@ -257,7 +257,7 @@
                      Height="360"
         />
 
-        <!-- BESKED -->
+        <!-- MESSAGE -->
         <TextBlock x:Name="MessageText"
                    Grid.Row="2"
                    Foreground="White"
@@ -274,7 +274,7 @@
                     HorizontalAlignment="Center"
                     Margin="0,5,0,15">
             
-            <!-- Række 1 -->
+            <!-- Row 1 -->
             <UniformGrid Rows="1"
                          Columns="10">
                 
@@ -329,7 +329,7 @@
                         Click="KeyboardButton_Click"/>
             </UniformGrid>
             
-            <!-- Række 2 -->
+            <!-- Row 2 -->
             <UniformGrid Rows="1"
                          Columns="9"
                          Margin="15,0,15,0">
@@ -380,7 +380,7 @@
                         Click="KeyboardButton_Click"/>
             </UniformGrid>
             
-            <!-- Række 3 -->
+            <!-- Row 3 -->
             <UniformGrid Rows="1"
                          Columns="9">
 
@@ -432,9 +432,9 @@
 
         </StackPanel>
 
-        <!-- Nyt spil -->
+        <!-- New game -->
         <Button Grid.Row="4"
-                Content="NYT SPIL"
+                Content="NEW GAME"
                 Style="{StaticResource NewGameButtonStyle}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"

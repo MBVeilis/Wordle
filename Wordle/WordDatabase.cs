@@ -3,7 +3,7 @@
     public class WordDatabase
     {
         private readonly string filePath = Path.Combine(
-            AppContext.BaseDirectory,                       // Peger på programmets mappe
+            AppContext.BaseDirectory,                       // Points to the program's folder.
             "Data",
             "words.txt"
         );
@@ -13,12 +13,12 @@
             if(!File.Exists(filePath))
             {
                 throw new FileNotFoundException(
-                    "Kunne ikke finde words.txt",
+                    "Could not find words.txt",
                     filePath
                 );
             }
 
-            return [.. File.ReadAllLines(filePath) // Bruger "[.." i stedet for ".ToList()"
+            return [.. File.ReadAllLines(filePath) // Uses "[.." instead of ".ToList()"
                 .Where(word => word.Length == 5)
                 .Select(word => word.ToLowerInvariant())];
         }

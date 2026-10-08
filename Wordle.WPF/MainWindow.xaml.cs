@@ -122,8 +122,6 @@ namespace Wordle.WPF
                 return;
             }
 
-            //int row = game.Attempts;
-
             Border tile = (Border)GameBoard.Children[
                 currentRow * 5 + currentColumn
             ];
@@ -131,6 +129,8 @@ namespace Wordle.WPF
             TextBlock text = (TextBlock)tile.Child;
 
             text.Text = letter.ToUpper();
+
+            AnimateLetterPop(tile);
 
             currentColumn++;
         }
@@ -154,8 +154,6 @@ namespace Wordle.WPF
 
             currentColumn--;
 
-            //int row = game.Attempts;
-
             Border tile = (Border)GameBoard.Children[
                 currentRow * 5 + currentColumn
             ];
@@ -167,8 +165,6 @@ namespace Wordle.WPF
 
         private string GetCurrentGuess()
         {
-            //int row = game.Attempts;
-
             string guess = "";
 
             for (int column = 0; column < 5; column++)
@@ -199,7 +195,7 @@ namespace Wordle.WPF
 
             if (currentColumn < 5)
             {
-                MessageText.Text = "Ordet skal være 5 bogstaver.";
+                MessageText.Text = "Word has to be 5 letters.";
 
                 Focus();
                 
@@ -223,11 +219,11 @@ namespace Wordle.WPF
 
                 if (game.HasWon) 
                 { 
-                    MessageText.Text = "Tillykke! Du gættede ordet!"; 
+                    MessageText.Text = "Congratulations! You guessed the word!"; 
                 } 
                 else if (game.IsGameOver) 
                 { 
-                    MessageText.Text = "Spillet er slut!"; 
+                    MessageText.Text = "The game is over!"; 
                 }
             }
             catch (ArgumentException ex)
@@ -240,7 +236,7 @@ namespace Wordle.WPF
             }
             finally
             {
-                isAnimating = false; // isAnimating bliver nulstillet her, også hvis backend kaster en exception.
+                isAnimating = false; // isAnimating gets reset here, even if the backend throws an exception. 
             }
 
             Focus();
@@ -248,6 +244,8 @@ namespace Wordle.WPF
 
         private async Task DisplayGuess(int row, string guess, LetterResult[] results)
         {
+            List<Task> animations = new();
+
             for (int column = 0; column < guess.Length; column++)
             {
                 Border tile = (Border)GameBoard.Children[
@@ -258,31 +256,35 @@ namespace Wordle.WPF
 
                 letter.Text = guess[column].ToString().ToUpper();
 
-                /*switch (results[column])
+                int delay = column switch
                 {
-                    case LetterResult.Correct:
-                        tile.Background = new SolidColorBrush(
-                            Color.FromRgb(83, 141, 78)
-                        );
-                        break;
+                    0 => 0,
+                    1 => 55,
+                    2 => 100,
+                    3 => 135,
+                    4 => 160,
+                    _ => 160
+                };
 
-                    case LetterResult.WrongPosition:
-                        tile.Background = new SolidColorBrush(
-                            Color.FromRgb(181, 159, 59)
-                        );
-                        break;
+                // Starts animation with a small delay, depending on the column.
+                animations.Add(
+                    AnimateTileWithDelay(
+                        tile, 
+                        results[column], 
+                        delay
+                    )
+                );
 
-                    case LetterResult.NotInWord:
-                        tile.Background = new SolidColorBrush(
-                            Color.FromRgb(58, 58, 60)
-                        );
-                        break;
-                }*/
-
-                await AnimateTileFlip(tile, results[column]);
-
-                await Task.Delay(80);
+                // Waits until tiles are done.
+                await Task.WhenAll(animations);
             }
+        }
+
+        private static async Task AnimateTileWithDelay(Border tile, LetterResult results, int delay)
+        {
+            await Task.Delay(delay);
+
+            await AnimateTileFlip(tile, results);
         }
 
         private void UpdateKeyboard(string guess, LetterResult[] results)
@@ -385,11 +387,11 @@ namespace Wordle.WPF
         {
             ScaleTransform transform = (ScaleTransform)tile.RenderTransform;
 
-            DoubleAnimation shrinkAnimation = new() // <- DoubleAnimation bliver brugt fordi ScaleY er en double-property, og fordi vi går fra 1 -> 0 -> 1.
+            DoubleAnimation shrinkAnimation = new() // <- DoubleAnimation is used because ScaleY is a double property, and because we go from 1 -> 0 -> 1.
             {
                 From = 1,
                 To = 0,
-                Duration = TimeSpan.FromMilliseconds(150),
+                Duration = TimeSpan.FromMilliseconds(100),
                 EasingFunction = new CubicEase
                 {
                     EasingMode = EasingMode.EaseIn
@@ -400,14 +402,14 @@ namespace Wordle.WPF
 
             shrinkAnimation.Completed += (_, _) =>
             {
-                firstHalf.SetResult(true);
+                firstHalf.TrySetResult(true);
             };
 
-            transform.BeginAnimation(ScaleTransform.ScaleYProperty, shrinkAnimation); // <- ScaleY bruges her.
+            transform.BeginAnimation(ScaleTransform.ScaleYProperty, shrinkAnimation); // <- ScaleY is used here.
 
             await firstHalf.Task;
 
-            // Når tilen er flad, ændres farven
+            // When the tile is flat, the color changes
             switch(result)
             {
                 case LetterResult.Correct:
@@ -433,7 +435,7 @@ namespace Wordle.WPF
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromMilliseconds(150),
+                Duration = TimeSpan.FromMilliseconds(100),
                 EasingFunction = new CubicEase
                 {
                     EasingMode = EasingMode.EaseOut
@@ -444,12 +446,37 @@ namespace Wordle.WPF
 
             expandAnimation.Completed += (_, _) =>
             {
-                secondHalf.SetResult(true);
+                secondHalf.TrySetResult(true);
             };
 
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, expandAnimation);
 
             await secondHalf.Task;
+        }
+
+        private static void AnimateLetterPop(Border tile)
+        {
+            ScaleTransform transform = (ScaleTransform)tile.RenderTransform;
+
+            transform.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+
+            transform.BeginAnimation(ScaleTransform.ScaleYProperty, null);
+
+            DoubleAnimation popAnimation = new()
+            {
+                From = 1.0,
+                To = 1.12,
+                Duration = TimeSpan.FromMilliseconds(80),
+                EasingFunction = new CubicEase
+                {
+                    EasingMode = EasingMode.EaseOut
+                },
+                AutoReverse = true
+            };
+
+            transform.BeginAnimation(ScaleTransform.ScaleXProperty, popAnimation);
+
+            transform.BeginAnimation(ScaleTransform.ScaleYProperty, popAnimation);
         }
 
         private void NewGameButton_Click(object sender, RoutedEventArgs e)

@@ -35,7 +35,7 @@
 
         private LetterResult[] CheckGuess(string guess)
         {
-            LetterResult[] results = [.. Enumerable.Repeat(  // "[.." i stedet for ".ToList()"
+            LetterResult[] results = [.. Enumerable.Repeat(  // "[.." instead of ".ToList()"
                 LetterResult.NotInWord,
                 WordLength
             )];
@@ -98,7 +98,7 @@
         {
             if (IsGameOver)
             {
-                throw new InvalidOperationException("Spillet er slut.");
+                throw new InvalidOperationException("The game is over.");
             }
 
             guess = guess.ToLower();
@@ -106,14 +106,14 @@
             if (guess.Length != WordLength)
             {
                 throw new ArgumentException(
-                    $"Ordet skal være {WordLength} bogstaver langt."
+                    $"The word must be {WordLength} letters long."
                 );
             }
 
             if (!words.Contains(guess))
             {
                 throw new ArgumentException(
-                    "Det ord findes ikke i ordlisten."
+                    "The word is not in the word list."
                 );
             }
 
