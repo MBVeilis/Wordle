@@ -29,6 +29,12 @@
         
         <SolidColorBrush x:Key="KeyboardBrush"
                          Color="#818384"/>
+        
+        <SolidColorBrush x:Key="KeyboardHoverBrush"
+                         Color="#A0A1A2"/>
+        
+        <SolidColorBrush x:Key="KeyboardPressedBrush"
+                         Color="#6A6B6C"/>
 
         <!-- TILE -->
         <Style x:Key="TileTextStyle"
@@ -102,6 +108,82 @@
 
             <Setter Property="BorderThickness" 
                     Value="0"/>
+            
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <!-- Fjern den blå fokusmarkering -->
+            <Setter Property="FocusVisualStyle"
+                    Value="{x:Null}"/>
+
+            <!-- Gør knappen til en ren visuel Wordle-tast -->
+            <Setter Property="Focusable"
+                    Value="False"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                SnapsToDevicePixels="True">
+
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                RecognizesAccessKey="True"/>
+
+                        </Border>
+
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- HOVER -->
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Opacity"
+                                        Value="0.85"/>
+
+                            </Trigger>
+
+
+                            <!-- PRESSED -->
+
+                            <Trigger Property="IsPressed"
+                                    Value="True">
+
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Opacity"
+                                        Value="0.65"/>
+
+                            </Trigger>
+
+
+                            <!-- DISABLED -->
+
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Opacity"
+                                        Value="0.5"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                        
+                    </ControlTemplate>
+                    
+                </Setter.Value>
+                
+            </Setter>
+            
         </Style>
 
         <!-- ENTER / BACKSPACE -->
@@ -110,7 +192,7 @@
                BasedOn="{StaticResource KeyboardButtonStyle}">
 
             <Setter Property="MinWidth"
-                    Value="60"/>
+                    Value="62"/>
 
             <Setter Property="FontSize"
                     Value="12"/>

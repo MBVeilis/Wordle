@@ -30,93 +30,11 @@
 
         public WordleGame()
         {
-            /*Random rand = new();
-
-            int index = rand.Next(words.Count);
-
-            secretWord = words[index];*/
-
             NewGame();
         }
 
-        /*public void Start()
-        {
-            Console.WriteLine("Velkommen til Wordle!");
-            Console.WriteLine($"Gæt ordet på 5 bogstaver, du har {maxAttempts} forsøg.");
-            Console.WriteLine();
-
-            for (int attempt = 1; attempt <= maxAttempts; attempt++)
-            {
-                Console.WriteLine($"Forsøg {attempt}: ");
-                string guess = Console.ReadLine()?.ToLower() ?? "";
-
-                if (guess.Length != WordLength)
-                {
-                    Console.WriteLine($"Ordet skal være {WordLength} bogstaver langt.");
-                    attempt--; // tælles ikke som et forsøg
-                    continue;
-                }
-
-                if (!words.Contains(guess))
-                {
-                    Console.WriteLine("Det ord findes ikke i ordlisten");
-                    attempt--;
-                    continue;
-                }
-
-                LetterResult[] results = CheckGuess(guess);
-
-                UpdateExcludedLetters(guess, results);
-
-                string result = "";
-                for (int i = 0; i < results.Length; i++)
-                {
-                    if (results[i] == LetterResult.Correct)
-                    {
-                        result += $"[{guess[i].ToString().ToUpper()}]"; // Korrekt sted
-                    }
-                    else if (results[i] == LetterResult.WrongPosition)
-                    {
-                        result += $"({guess[i]})"; // Korrekt bogstav, forkert sted
-                    }
-                    else
-                    {
-                        result += guess[i]; // Forkert bogstav
-                    }
-                }
-
-                Console.WriteLine(result);
-
-                Console.WriteLine();
-
-                Console.WriteLine("Udelukkede bogstaver: ");
-
-                foreach (char letter in excludedLetters)
-                {
-                    Console.Write($"{char.ToUpper(letter)} ");
-                }
-
-                Console.WriteLine("");
-                Console.WriteLine("");
-
-                if (guess == secretWord)
-                {
-                    Console.WriteLine($"Tillykke! Du gættede ordet '{secretWord}' korrekt!");
-                    break;
-                }
-
-                if (attempt == maxAttempts)
-                {
-                    Console.WriteLine($"Desværre, du brugte alle forsøg. Ordet var '{secretWord}'.");
-                }
-            }
-        }*/
-
         private LetterResult[] CheckGuess(string guess)
         {
-            //Console.WriteLine($"DEBUG - Secret word: {secretWord}");
-            //Console.WriteLine($"DEBUG - Guess: {guess}");
-
             LetterResult[] results = [.. Enumerable.Repeat(  // "[.." i stedet for ".ToList()"
                 LetterResult.NotInWord,
                 WordLength

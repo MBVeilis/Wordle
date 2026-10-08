@@ -83,16 +83,15 @@ namespace Wordle.WPF
             if (key == "enter") 
             { 
                 SubmitGuess(); 
-                return; 
             }
-
-            if (key == "backspace") 
+            else if (key == "backspace") 
             { 
-                RemoveLetter(); 
-                return; 
+                RemoveLetter();
             }
-
-            AddLetter(key);
+            else
+            {
+                AddLetter(key);
+            }
 
             Focus();
         }
@@ -303,7 +302,7 @@ namespace Wordle.WPF
             return null;
         }
 
-        private IEnumerable<DependencyObject> GetVisualChildren(DependencyObject parent)
+        private static IEnumerable<DependencyObject> GetVisualChildren(DependencyObject parent)
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
