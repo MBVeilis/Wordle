@@ -208,23 +208,28 @@ namespace Wordle.WPF
 
             try
             {
-                LetterResult[] results = game.MakeGuess(guess); 
-                
-                await DisplayGuess(currentRow, guess, results); 
+                LetterResult[] results = game.MakeGuess(guess);
+
+                int guessedRow = currentRow;
+
+                await DisplayGuess(guessedRow, guess, results); 
                 
                 UpdateKeyboard(guess, results); 
                 
                 currentColumn = 0;
-                currentRow++;
 
                 if (game.HasWon) 
                 { 
-                    MessageText.Text = "Congratulations! You guessed the word!"; 
+                    MessageText.Text = "Congratulations! You guessed the word!";
+
+                    await AnimateWinningRow(guessedRow);
                 } 
                 else if (game.IsGameOver) 
                 { 
                     MessageText.Text = "The game is over!"; 
                 }
+
+                currentRow++;
             }
             catch (ArgumentException ex)
             {
@@ -477,6 +482,42 @@ namespace Wordle.WPF
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, popAnimation);
 
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, popAnimation);
+        }
+
+        private async Task AnimateWinningRow(int row)
+        {
+            int jumpHeight = 18;
+            int jumpDuration = 180;
+            int delayBetweenTiles = 75;
+
+            for (int column = 0; column < 5; column++)
+            {
+                Border tile = (Border)GameBoard.Children[
+                    row * 5 + column
+                ];
+
+                TranslateTransform transform = new();
+
+                tile.RenderTransform = transform;
+
+                DoubleAnimation jumpAnimation = new()
+                {
+                    From = 0,
+                    To = -jumpHeight,
+                    Duration = TimeSpan.FromMilliseconds(jumpDuration),
+                    AutoReverse = true,
+                    EasingFunction = new QuadraticEase
+                    {
+                        EasingMode = EasingMode.EaseOut
+                    }
+                };
+
+                transform.BeginAnimation(TranslateTransform.YProperty, jumpAnimation);
+
+                await Task.Delay(delayBetweenTiles);
+            }
+
+            await Task.Delay(jumpDuration * 2);
         }
 
         private void NewGameButton_Click(object sender, RoutedEventArgs e)
