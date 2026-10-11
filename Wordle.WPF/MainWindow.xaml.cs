@@ -12,11 +12,15 @@ namespace Wordle.WPF
         private int currentColumn = 0;
         private int currentRow = 0;
         private bool isAnimating = false;
+        private readonly MediaPlayer backgroundMusic = new();
+        private bool isMusicEnabled = true;
         public MainWindow()
         {
             InitializeComponent();
 
             CreateBoard();
+
+            StartBackgroundMusic();
 
             PreviewKeyDown += MainWindow_PreviewKeyDown;
 
@@ -518,6 +522,54 @@ namespace Wordle.WPF
             }
 
             await Task.Delay(jumpDuration * 2);
+        }
+
+        private void StartBackgroundMusic()
+        {
+            string musicPath = System.IO.Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Audio",
+                "Kevin MacLeod_ On the Ground.mp3 "
+            );
+
+            backgroundMusic.Open(new Uri(musicPath));
+            backgroundMusic.Volume = 0.15;
+            backgroundMusic.MediaEnded += (_, _) =>
+            {
+                if (isMusicEnabled)
+                {
+                    backgroundMusic.Position = TimeSpan.Zero;
+                    backgroundMusic.Play();
+                }
+            };
+
+            backgroundMusic.Play();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            backgroundMusic.Stop();
+            backgroundMusic.Close();
+            
+            base.OnClosed(e);
+        }
+
+        private void MusicButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isMusicEnabled)
+            {
+                backgroundMusic.Pause();
+                isMusicEnabled = false;
+                MusicButton.Content = "♫ MUSIC OFF";
+            }
+            else
+            {
+                backgroundMusic.Play();
+                isMusicEnabled = true;
+                MusicButton.Content = "♫ MUSIC ON";
+            }
+
+            Focus();
         }
 
         private void NewGameButton_Click(object sender, RoutedEventArgs e)

@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Audio\Kevin MacLeod_ On the Ground.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Audio\Kevin MacLeod_ On the Ground.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Wordle\Wordle.csproj" />
   </ItemGroup>
 

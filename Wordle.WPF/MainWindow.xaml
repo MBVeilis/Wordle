@@ -432,13 +432,26 @@
 
         </StackPanel>
 
-        <!-- New game -->
-        <Button Grid.Row="4"
-                Content="NEW GAME"
-                Style="{StaticResource NewGameButtonStyle}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Margin="0,5,0,0"
-                Click="NewGameButton_Click"/>
+        <!-- GAME CONTROLS -->
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,5,0,0">
+
+            <!-- New game -->
+            <Button Content="NEW GAME"
+                    Style="{StaticResource NewGameButtonStyle}"
+                    Margin="0,0,10,0"
+                    Click="NewGameButton_Click"/>
+
+            <!-- Toggle music -->
+            <Button x:Name="MusicButton"
+                    Content="♫ MUSIC ON"
+                    Style="{StaticResource NewGameButtonStyle}"
+                    Width="130"
+                    Click="MusicButton_Click"/>
+
+        </StackPanel>
     </Grid>
 </Window>
