@@ -11,3 +11,5 @@
 - Battle mode? (Have two players fight each other in some way...... TBD)
 
 - Challenge mode? (make the board rotate or have the words be in reverse etc.)
+
+- Make the game using MAUI, just to see the difference.
