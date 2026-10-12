@@ -4,6 +4,8 @@
 
 - A window with statistics will pop up right after you have guessed a word correctly, showing how many tries you did, accuracy of your guesses and so on.
 
+- Settings button that opens a menu where you can adjust audio and video settings etc.
+
 - Leaderboard.
 
 - Background animation while you play the game, like space or a city during night time.
