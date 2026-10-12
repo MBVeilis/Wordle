@@ -1,17 +1,19 @@
-- Specific music plays when you have either guessed the word correctly or have failed to guess the word.
+* Specific music plays when you have either guessed the word correctly or have failed to guess the word.
 
-- Background music stops when the word has either been guessed or not.
+* Background music stops when the word has either been guessed or not.
 
-- A window with statistics will pop up right after you have guessed a word correctly, showing how many tries you did, accuracy of your guesses and so on.
+* A window with statistics will pop up right after you have guessed a word correctly, showing how many tries you did, accuracy of your guesses and so on.
 
-- Settings button that opens a menu where you can adjust audio and video settings etc.
+* Settings button that opens a menu where you can adjust audio and video settings etc.
 
-- Leaderboard.
+* A start menu (with specific music too) - so when you open the game a start menu appears with the title, a start button, a guide button (explains the rules of the game), a settings button and a close button.
 
-- Background animation while you play the game, like space or a city during night time.
+* Leaderboard.
 
-- Battle mode? (Have two players fight each other in some way...... TBD)
+* Background animation while you play the game, like space or a city during night time.
 
-- Challenge mode? (make the board rotate or have the words be in reverse etc.)
+* Battle mode? (Have two players fight each other in some way...... TBD)
 
-- Make the game using MAUI, just to see the difference.
+* Challenge mode? (make the board rotate or have the words be in reverse etc.)
+
+* Make the game using MAUI, just to see the difference.
